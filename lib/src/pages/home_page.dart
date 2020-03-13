@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/material.dart';
 import 'package:qrreaderapp/src/bloc/scans_bloc.dart';
 
@@ -48,19 +49,15 @@ class _HomePageState extends State<HomePage> {
   }
 
   _scanQR(BuildContext context) async {
-    String futureString = 'http://google.com';
-    // Future String : geo:40.70380499375163,-74.01435270747074
-    /*try{
+    String futureString;
+    try{
       futureString = await BarcodeScanner.scan();
     }catch(e){
       futureString = e.toString();
-    }*/
-    print("Future String : $futureString");
-    if (futureString != null) {
+    }
+    if (futureString != null && !futureString.contains('Exception')) {
       final scan = ScanModel(valor: futureString);
-      final scan2 = ScanModel(valor: 'geo:19.3541784,-99.0944171,13z');
       scansBloc.addScan(scan);
-      scansBloc.addScan(scan2);
 
       if (Platform.isIOS) {
         Future.delayed(Duration(milliseconds: 750), () {
@@ -74,10 +71,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget _callPage(int paginaActual) {
     switch (paginaActual) {
-      case 0:
-        return MapasPage();
-      case 1:
-        return DireccionesPage();
+      case 0: return MapasPage();
+      case 1: return DireccionesPage();
+
       default:
         return MapasPage();
     }

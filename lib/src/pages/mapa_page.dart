@@ -10,6 +10,7 @@ class MapaPage extends StatefulWidget {
 class _MapaPageState extends State<MapaPage> {
 
   final map = new MapController();
+  String tipoMapa = 'streets';
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,7 @@ class _MapaPageState extends State<MapaPage> {
         ],
       ),
       body: _crearFlutterMap(scanModel),
+      floatingActionButton: _crearBotonFotante(context),
     );
   }
 
@@ -50,8 +52,7 @@ class _MapaPageState extends State<MapaPage> {
       '{id}/{z}/{x}/{y}@2x.png?access_token={accessToken}',
       additionalOptions: {
         'accessToken': 'pk.eyJ1IjoiYXJhcmFnZSIsImEiOiJjazdvNzdmeGQwNnY5M2VwYnlrb2NvZWl3In0.BnXmKNux9w5E1MCM7R00Lg',
-        'id': 'mapbox.streets' 
-        // streets, dark, light, outdoors, satellite
+        'id': 'mapbox.$tipoMapa' 
       }
     ); 
   }
@@ -72,6 +73,35 @@ class _MapaPageState extends State<MapaPage> {
           )
         )
       ]
+    );
+  }
+
+  Widget _crearBotonFotante(BuildContext context){
+    return FloatingActionButton(
+      child: Icon(Icons.repeat),
+      backgroundColor: Theme.of(context).primaryColor,
+      onPressed: (){
+        // streets, dark, light, outdoors, satellite
+        setState(() {
+          switch(tipoMapa){
+            case 'streets':
+              tipoMapa = 'dark';
+              break;
+            case 'dark':
+              tipoMapa = 'light';
+              break;
+            case 'light':
+              tipoMapa = 'outdoors';
+              break;
+            case 'outdoors':
+              tipoMapa = 'satellite';
+              break;
+            default:
+              tipoMapa = 'streets';
+              break;
+          }
+        });
+      },
     );
   }
 }
